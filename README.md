@@ -7,3 +7,17 @@ Software engineering analysis and design practice for a Vacation Tracking System
 A Vacation Tracking System (VTS) aims to empower employees, improve vacation management, and reduce administrative workload.
 
  
+
+## 2. Functional Requirements
+
+- **FR-01: The system must validate and verify leave requests using rules.
+- **FR-02: The system must support manager approval when required.
+- **FR-03: The system must allow users to view vacation requests from the previous calendar year.
+- **FR-04: The system must allow vacation requests up to 18 months in the future.
+- **FR-05: The system must send emails to request manager approval and notify employees of status changes.
+- **FR-06: The system must record activity logs for all transactions.
+- **FR-07: The system must allow HR staff and system administrators to override actions blocked by rules and log these overrides.
+- **FR-08: The system must allow managers to award personal leave time within system-set limits.
+- **FR-09: The system must provide a web service for other internal systems to get employee vacation request summaries.
+- **FR-10: The system must get required employee information and changes from existing HR systems.
+- **FR-11: The system must use the existing intranet portal's SSO mechanism for authentication.
