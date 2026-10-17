@@ -21,3 +21,13 @@ A Vacation Tracking System (VTS) aims to empower employees, improve vacation man
 - **FR-09: The system must provide a web service for other internal systems to get employee vacation request summaries.
 - **FR-10: The system must get required employee information and changes from existing HR systems.
 - **FR-11: The system must use the existing intranet portal's SSO mechanism for authentication.
+
+## 3. Non-Functional Requirements
+
+- **NFR-01 (Usability):** The system shall be easy to use and intuitive for employees.
+
+## 4. Constraints
+
+- **CON-01 (Existing Infrastructure):** The system shall use the existing hardware and middleware.
+- **CON-02 (Intranet Portal):** The system shall be implemented as an extension to the existing intranet portal system.
+- **CON-03 (Authentication):** The system shall use the existing intranet portal's Single Sign-On (SSO) mechanism for all authentication.
