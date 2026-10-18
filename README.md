@@ -72,3 +72,71 @@ The HR clerk views employee personal data, keeps employee information accurate a
 
 ### System Admin
 The system administrator manages the system's technical resources, such as the web server and database, and collects and archives log files.
+
+
+## 7. Manage Time — Use Case Analysis
+
+### 7.1 Entities (Data Model)
+
+![Manage Time Data Model](diagrams/managetime_datamodel.jpg)
+
+### 7.2 Flowchart
+
+![Manage Time Flowchart](diagrams/managetime_flowchart.png)
+
+### 7.3 Sequence Diagram
+
+![Manage Time Sequence Diagram](diagrams/managetime_sequencydiagram.png)
+
+
+### 7.4 Pseudocode
+BEGIN ManageTime
+
+    REQUIRE employee is authenticated and authorized
+
+    Employee opens VTS
+    Display vacation requests and leave balances
+
+    Employee selects a leave category with positive balance
+    Display calendar and request form
+
+    REPEAT
+        Employee enters dates, hours, title, description
+        Employee submits request
+        Validate request
+
+        IF request is invalid THEN
+            Display validation errors
+            Ask employee to edit or cancel
+
+            IF employee cancels THEN
+                END ManageTime
+            END IF
+        END IF
+    UNTIL request is valid
+
+    Return employee to VTS home
+
+    IF manager approval is required THEN
+        Send approval email to authorized manager
+        Set request status to PENDING_APPROVAL
+
+        Manager opens VTS
+        Authenticate manager if required
+        Display pending requests
+        Manager selects and reviews request
+
+        IF manager approves THEN
+            Set request status to APPROVED
+        ELSE
+            Require rejection explanation
+            Set request status to REJECTED
+        END IF
+
+        Send result email to employee
+        Return manager to VTS home
+    ELSE
+        // Further processing not specified in main flow
+    END IF
+
+END ManageTime
