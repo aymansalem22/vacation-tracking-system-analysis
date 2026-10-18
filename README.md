@@ -31,3 +31,31 @@ A Vacation Tracking System (VTS) aims to empower employees, improve vacation man
 - **CON-01 (Existing Infrastructure):** The system shall use the existing hardware and middleware.
 - **CON-02 (Intranet Portal):** The system shall be implemented as an extension to the existing intranet portal system.
 - **CON-03 (Authentication):** The system shall use the existing intranet portal's Single Sign-On (SSO) mechanism for all authentication.
+
+## 5. Domain — Define Problem
+
+### 5.1 Business Problem
+
+The vacation request process is slow because it involves multiple manual steps. Employees need an easier way to manage their vacation time without complicated procedures.
+
+### 5.2 Domain Concepts
+
+- Employee
+- Manager
+- Human Resources (HR)
+- Vacation Request
+- Leave Policy
+- Vacation Balance
+
+### 5.3 System Boundaries
+
+**Inside the System:**
+- Validate and verify leave requests using business rules.
+- Send email notifications for manager approval and request status changes.
+- Allow authorized HR staff and system administrators to override restricted actions and log these overrides.
+
+**Outside the System:**
+- Choosing vacation dates on behalf of employees. *(Inferred from the employee's responsibility to manage their own leave.)*
+
+**External Systems:**
+- Existing HR legacy systems used to retrieve employee information and updates.
