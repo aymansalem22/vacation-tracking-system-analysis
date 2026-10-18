@@ -58,3 +58,17 @@ The vacation request process is slow because it involves multiple manual steps. 
 
 **External Systems:**
 - Existing HR legacy systems used to retrieve employee information and updates.
+
+## 6. Actors
+
+### Employee
+The employee uses the system to manage his or her vacation time.
+
+### Manager
+The manager has the same capabilities as an employee. The manager also approves vacation requests from direct subordinates and can award comp time within system-set limits.
+
+### Clerk (HR)
+The HR clerk views employee personal data, keeps employee information accurate and up to date across HR systems, and can add or remove most records in the VTS.
+
+### System Admin
+The system administrator manages the system's technical resources, such as the web server and database, and collects and archives log files.
