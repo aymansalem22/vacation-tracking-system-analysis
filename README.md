@@ -20,7 +20,6 @@ A Vacation Tracking System (VTS) aims to empower employees, improve vacation man
 - **FR-08:**: The system must allow managers to award personal leave time within system-set limits.
 - **FR-09:**: The system must provide a web service for other internal systems to get employee vacation request summaries.
 - **FR-10:**: The system must get required employee information and changes from existing HR systems.
-- **FR-11:**: The system must use the existing intranet portal's SSO mechanism for authentication.
 
 ## 3. Non-Functional Requirements
 
