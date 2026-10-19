@@ -92,51 +92,55 @@ The system administrator manages the system's technical resources, such as the w
 ### 7.4 Pseudocode
 BEGIN ManageTime
 
-    REQUIRE employee is authenticated and authorized
 
-    Employee opens VTS
-    Display vacation requests and leave balances
+START
 
-    Employee selects a leave category with positive balance
-    Display calendar and request form
+Employee opens VTS from the intranet portal
+System displays vacation requests and balances
 
-    REPEAT
-        Employee enters dates, hours, title, description
-        Employee submits request
-        Validate request
+Employee selects a leave category
+System displays the request form and calendar
+Employee enters dates and hours
 
-        IF request is invalid THEN
-            Display validation errors
-            Ask employee to edit or cancel
+REPEAT
+    Employee submits the request
+    System validates the request
 
-            IF employee cancels THEN
-                END ManageTime
-            END IF
-        END IF
-    UNTIL request is valid
+    IF request is invalid THEN
+        Show validation errors
 
-    Return employee to VTS home
-
-    IF manager approval is required THEN
-        Send approval email to authorized manager
-        Set request status to PENDING_APPROVAL
-
-        Manager opens VTS
-        Authenticate manager if required
-        Display pending requests
-        Manager selects and reviews request
-
-        IF manager approves THEN
-            Set request status to APPROVED
+        IF employee chooses to cancel THEN
+            END PROCESS
         ELSE
-            Require rejection explanation
-            Set request status to REJECTED
+            Employee edits request details
         END IF
-
-        Send result email to employee
-        Return manager to VTS home
-    ELSE
-        // Further processing not specified in main flow
     END IF
+
+UNTIL request is valid
+
+IF manager approval is required THEN
+    Set request status to Pending Approval
+    Send approval email to manager
+
+    Manager opens the request
+    System displays request details
+
+    IF manager approves THEN
+        Set request status to Approved
+        Send approval email to employee
+    ELSE
+        Manager enters rejection reason
+        Set request status to Rejected
+        Send rejection email to employee
+    END IF
+
+ELSE
+    Continue processing without manager approval
+END IF
+
+Record transactions in activity logs
+
+END
+  
 
 END ManageTime
