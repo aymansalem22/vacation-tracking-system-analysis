@@ -90,6 +90,7 @@ The system administrator manages the system's technical resources, such as the w
 
 
 ### 7.4 Pseudocode
+```text
 BEGIN ManageTime
 
 
@@ -144,3 +145,4 @@ END
   
 
 END ManageTime
+```
