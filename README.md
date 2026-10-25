@@ -146,3 +146,161 @@ END
 
 END ManageTime
 ```
+
+## 8. Session 2 — Workflow & Use Case Design
+
+### 8.1 Overview
+
+This session focuses on request states, editing and cancelling vacation requests, user interface design, and a configurable approval workflow.
+
+The diagrams below are analysis and design exercises based on the VTS case study.
+
+### 8.2 Vacation Request State Machine
+
+The State Machine Diagram represents the lifecycle of a vacation request, including pending approval, approval, rejection, and cancellation.
+
+![Vacation Request State Machine](diagrams/session_2/statediagramrequestvacc.png)
+
+### 8.3 Cancel Approved Request
+
+An employee can cancel an approved vacation request scheduled in the future or within the previous five business days.
+
+For future requests, the employee confirms the cancellation. For recent-past requests, a short explanation is also required.
+
+After successful cancellation, VTS changes the request status to Cancelled, restores the vacation balance, and notifies the manager. Aborting the cancellation leaves the request unchanged.
+
+#### Flowchart
+
+![Cancel Approved Request Flowchart](diagrams/session_2/Cancel%20Approved%20Request%20%E2%80%94%20Flowchart.png)
+
+#### Sequence Diagram
+
+![Cancel Approved Request Sequence Diagram](diagrams/session_2/Cancel%20Request%20%E2%80%94%20Sequence%20Diagram.drawio.png)
+
+### 8.4 Edit Pending Request
+
+An employee can edit the title, comments, or dates of a request that is still pending approval.
+
+If the changes are accepted, VTS returns to the home page. If errors are found, VTS redisplays the editing page and explains the problems.
+
+The employee can also choose to withdraw the pending request. VTS asks for confirmation before withdrawing it.
+
+#### Flowchart
+
+![Edit Pending Request Flowchart](diagrams/session_2/Edit%20Pending%20Request%20%E2%80%94%20Flowchart.png)
+
+#### Sequence Diagram
+
+![Edit Pending Request Sequence Diagram](diagrams/session_2/Edit%20Pending%20%E2%80%94%20Sequence.png)
+
+### 8.5 Employee UI Concept
+
+The proposed employee dashboard includes a profile summary, vacation balances, a request list, request statuses, and actions such as View, Edit, and Cancel.
+
+The interface should follow the existing intranet portal's design and user experience.
+
+![Employee UI Concept](diagrams/session_2/ui_design.png)
+
+### 8.6 Database Changes Review
+
+Editing a pending request updates its existing information after validation.
+
+Cancelling an approved request changes its status to Cancelled and restores the used vacation balance.
+
+Withdrawing a pending request requires confirmation. Its exact status and balance impact depend on the agreed business rules and database design.
+
+No new database table is necessarily required for these operations alone.
+
+![Database Changes Overview](diagrams/session_2/VTS%20Database%20Changes%20Overview.png)
+
+### 8.7 Dynamic Workflow Design
+
+The proposed data-driven workflow separates states, transitions, roles, and the current state of each vacation request.
+
+- WORKFLOW_STATE stores possible states.
+- WORKFLOW_TRANSITION defines allowed state changes, events, and required roles.
+- ROLE stores user roles.
+- VACATION_REQUEST stores the current state of each request.
+
+This is a proposed design for supporting future approval stages, such as HR_PENDING, with minimal changes to the application logic.
+
+![Dynamic Workflow Database Design](diagrams/session_2/dynamic%20work%20flow%20design.png)
+
+### 8.8 Pseudocode — Current Workflow
+
+The following is a simplified example of manager approval without an additional HR stage.
+
+```text
+BEGIN ApproveRequest
+
+    READ current state of vacation request
+
+    IF current state = PENDING THEN
+        CHECK manager authorization
+
+        IF manager is authorized THEN
+            VALIDATE applicable business rules
+
+            IF rules are valid THEN
+                UPDATE request state TO APPROVED
+            ELSE
+                REJECT action
+            END IF
+        ELSE
+            REJECT action
+        END IF
+    ELSE
+        REJECT invalid transition
+    END IF
+
+END ApproveRequest
+```
+
+### 8.9 Pseudocode — Dynamic Workflow
+
+This design reads allowed transitions from the database instead of hardcoding every destination state in Java.
+
+```text
+BEGIN ProcessRequest
+
+    RECEIVE request_id, selected_event, current_user
+
+    READ current_state_id
+        FROM VACATION_REQUEST
+        WHERE request_id = request_id
+
+    FIND matching transition
+        FROM WORKFLOW_TRANSITION
+        WHERE from_state_id = current_state_id
+          AND event_name = selected_event
+
+    IF transition does not exist THEN
+        REJECT action
+
+    ELSE IF current_user does not have transition.required_role_id THEN
+        REJECT unauthorized action
+
+    ELSE
+        VALIDATE applicable business rules
+
+        IF validation fails THEN
+            REJECT action
+        ELSE
+            UPDATE VACATION_REQUEST.current_state_id
+                TO transition.to_state_id
+
+            RECORD transaction in activity log
+        END IF
+    END IF
+
+END ProcessRequest
+```
+
+### 8.10 Design Notes and Assumptions
+
+- The HR approval stage is a future workflow scenario, not an existing mandatory step in the original VTS use case.
+- WORKFLOW_STATE, WORKFLOW_TRANSITION, ROLE, and the current_state_id field represent a proposed configurable design.
+- The application must enforce authorization, validation, and auditing regardless of workflow configuration.
+- Changing request dates may require additional balance and overlap checks according to HR policies.
+- The precise database handling of withdrawn pending requests requires clarification of the business rules.
+- These diagrams and pseudocode describe an analysis/design proposal, not a completed software implementation.
